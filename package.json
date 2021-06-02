@@ -1,0 +1,30 @@
+{
+  "name": "week-2",
+  "version": "1.0.0",
+  "description": "This week is a deeper dive into Express API development using MongoDB for data storage. The focus of this week will be on basic CRUD operations.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest --coverage --runInBand",
+    "tdd": "jest --watch --runInBand"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UW-PCE-JSCRIPT-330-Summer-2021/week-2.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/UW-PCE-JSCRIPT-330-Summer-2021/week-2/issues"
+  },
+  "homepage": "https://github.com/UW-PCE-JSCRIPT-330-Summer-2021/week-2#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.12"
+  },
+  "devDependencies": {
+    "@shelf/jest-mongodb": "^1.2.5",
+    "jest": "^26.6.3",
+    "supertest": "^6.1.3"
+  }
+}
