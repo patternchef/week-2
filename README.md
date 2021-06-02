@@ -75,5 +75,5 @@ Clear, organized project structure | 20
 
 ### Submission
 
-- Create a pull request (PR) from your repository to the master branch of this repository. Make your name the title of the PR. 
+- Create a pull request (PR) from your repository to the main branch of this repository. Make your name the title of the PR. 
 - Continuous Integration is handled using Github Actions. This will automatically run your tests and show the results on your PR. If you see a red X and a message saying `All checks have failed` then you will not receive full credit. Ensure all tests are passing in order to receive full marks.
