@@ -6,4 +6,5 @@ const eventSchema = new mongoose.Schema({
   calendarId: { type: mongoose.ObjectId, required: true },
 });
 
+
 module.exports = mongoose.model("events", eventSchema);

@@ -1,9 +1,7 @@
 const Events = require('../models/events');
 
-module.exports = {};
-
-module.exports.create = async (name) => {
-    return await Events.create(name);
+module.exports.create = async (event) => {
+    return await Events.create(event);
 };
 
 module.exports.getAll = async (id) => {

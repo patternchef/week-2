@@ -5,13 +5,19 @@ const EventDAO = require('../daos/events');
 
 router.get("/", async (req, res, next) => {
     try {
-        const calendar = await CalendarDAO.getById(req.params.calendarId);
+        const calendarId = req.params.calendarId;
+        const calendar = await CalendarDAO.getById(calendarId);
         if (!calendar) {
-            res.sendStatus(404);
+            res.status(404).send('Calendar not found');
             return;
         }
-        const events = await EventDAO.getAll(req.params.calendarId);
-        res.json(events);
+        const events = await EventDAO.getAll(calendarId);
+        if (!events) {
+            res.status(404).send('Events not found');
+            return;
+        } else {
+            res.json(events);
+        }
     } catch (e) {
         next(e);
     }
@@ -19,9 +25,13 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:id", async (req, res, next) => {
     try {
-        const event = await EventDAO.getById(req.params.id);
-        if (!event || event.calendarId != req.params.calendarId) {
-            res.sendStatus(404);
+        const calendarId = req.params.calendarId;
+        const eventId = req.params.id;
+        // console.log("req:", req.params);
+        const event = await EventDAO.getById(eventId);
+        // console.log("eventObj:", event);
+        if (!event || event.calendarId != calendarId) {
+            res.status(404).send('Event not found');
             return;
         }
         res.json(event);
@@ -32,32 +42,36 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
     try {
-        const calendar = await CalendarDAO.getById(req.params.calendarId);
+        const calendarId = req.params.calendarId;
+        const eventData = req.body;
+        const calendar = await CalendarDAO.getById(calendarId);
         if (!calendar) {
-            res.sendStatus(404);
+            res.status(404).send('Calendar not found');
         } else {
-            req.body.calendarId = calendar._id;
-            const savedEvent = await EventDAO.create(req.body);
-            res.json(savedEvent);
+            eventData.calendarId = calendarId;
+            const newEvent = await EventDAO.create(eventData);
+            res.json(newEvent);
         }
     } catch (e) {
         if (e.message.includes('validation failed:')) {
             res.status(400).send(e.message);
         } else {
-            res.status(500).send(e.message);
+            res.status(500).send('Unexpected Server Error');
         }
     }
 });
 
 router.put("/:id", async (req, res, next) => {
     try {
-        const calendar = await CalendarDAO.getById(req.params.calendarId);
-        const event = await EventDAO.getById(req.params.id);
-        if (!calendar || !event || req.params.calendarId != event.calendarId.toString()) {
+        const calendarId = req.params.calendarId;
+        const eventId = req.params.id;
+        const eventData = req.body;        
+        const event = await EventDAO.getById(eventId);
+        if (!event || event.calendarId != calendarId) {
             res.sendStatus(404);
         } else {
-            const result = await EventDAO.updateById(req.params.id, req.body);
-            res.json(result);
+            const updateEvent = await EventDAO.updateById(eventId, eventData);
+            res.json(updateEvent);
         }
     } catch (e) {
         next(e);
@@ -66,12 +80,13 @@ router.put("/:id", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
     try {
-        const calendar = await CalendarDAO.getById(req.params.calendarId);
-        const event = await EventDAO.getById(req.params.id);
-        if (!calendar || !event || req.params.calendarId != event.calendarId.toString()) {
+        const calendarId = req.params.calendarId;
+        const eventId = req.params.id;
+        const event = await EventDAO.getById(eventId);
+        if (!event || event.calendarId != calendarId ) {
             res.sendStatus(404);
         } else {
-            const deleteEvent = await EventDAO.removeById(req.params.id);
+            const deleteEvent = await EventDAO.removeById(eventId);
             if (deleteEvent) {
                 res.sendStatus(200);
             } else {
@@ -82,4 +97,5 @@ router.delete("/:id", async (req, res, next) => {
         next(e);
     }
 });
+
 module.exports = router;
